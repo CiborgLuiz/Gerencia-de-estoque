@@ -7,17 +7,17 @@ use App\Models\User;
 
 class SalePolicy
 {
-    public function create(User $user): bool
-    {
-        return $user->hasRole(User::ROLE_ADMIN, User::ROLE_MANAGER, User::ROLE_SELLER);
-    }
-
     public function viewAny(User $user): bool
     {
-        return $this->create($user);
+        return $user->hasRole(User::ROLE_OWNER, User::ROLE_ADMIN, User::ROLE_MANAGER, User::ROLE_SELLER);
     }
 
-    public function view(User $user, Sale $sale): bool
+    public function create(User $user): bool
+    {
+        return $user->hasRole(User::ROLE_OWNER, User::ROLE_ADMIN, User::ROLE_MANAGER, User::ROLE_SELLER);
+    }
+
+    public function update(User $user, Sale $sale): bool
     {
         return $user->isAdmin() || $sale->user_id === $user->id;
     }

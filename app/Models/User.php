@@ -15,6 +15,7 @@ class User extends Authenticatable
     use Notifiable;
     use SoftDeletes;
 
+    public const ROLE_OWNER = 'dono';
     public const ROLE_ADMIN = 'admin';
     public const ROLE_MANAGER = 'gerente';
     public const ROLE_SELLER = 'vendedor';
@@ -40,6 +41,22 @@ class User extends Authenticatable
         ];
     }
 
+    protected static function booted(): void
+    {
+        static::creating(function (User $user): void {
+            if (!$user->iden && $user->role_id) {
+                $roleName = Role::query()->whereKey($user->role_id)->value('name');
+                if ($roleName) {
+                    $user->iden = strtolower((string) $roleName);
+                }
+            }
+
+            if (!$user->iden) {
+                $user->iden = self::ROLE_SELLER;
+            }
+        });
+    }
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
@@ -62,6 +79,6 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->hasRole(self::ROLE_ADMIN);
+        return $this->hasRole(self::ROLE_OWNER, self::ROLE_ADMIN);
     }
 }

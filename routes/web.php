@@ -7,7 +7,7 @@ use App\Domains\Sales\Controllers\StatisticsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::view('/', 'landing')->name('home');
 
 require __DIR__.'/auth.php';
 
@@ -32,11 +32,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('products.store');
 
     Route::get('/notas-fiscais', [InvoiceController::class, 'index'])
-        ->middleware('role:admin,gerente')
+        ->middleware('role:dono,admin,gerente')
         ->name('invoices.index');
 
     Route::post('/notas-fiscais/{invoice}/cancelar', [InvoiceController::class, 'cancel'])
-        ->middleware('role:admin')
+        ->middleware('role:dono,admin')
         ->name('invoices.cancel');
 });
 

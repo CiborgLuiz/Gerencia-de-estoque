@@ -10,17 +10,20 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(RoleSeeder::class);
+        $this->call([
+            RoleSeeder::class,
+            AccessKeySeeder::class,
+        ]);
 
-        $adminRole = Role::where('name', 'admin')->first();
+        $ownerRole = Role::where('name', 'dono')->first();
 
-        User::firstOrCreate(
+        User::updateOrCreate(
             ['email' => 'admin@email.com'],
             [
-                'name' => 'Administrador',
+                'name' => 'Dono da Empresa',
                 'password' => bcrypt('123456'),
-                'role_id' => $adminRole?->id,
-                'iden' => 'admin',
+                'role_id' => $ownerRole?->id,
+                'iden' => 'dono',
             ]
         );
     }

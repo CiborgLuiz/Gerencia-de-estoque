@@ -14,21 +14,16 @@
         </div>
 
         <div class="mt-4">
-            <x-input-label for="access_key" :value="__('Chave de acesso')" />
-            <x-text-input id="access_key" class="block mt-1 w-full" type="text" name="access_key" :value="old('access_key')" required />
-            <x-input-error :messages="$errors->get('access_key')" class="mt-2" />
-        </div>
-
-        <div class="mt-4">
             <x-input-label for="password" :value="__('Senha')" />
             <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirmar Senha')" />
-            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            <x-input-label for="access_key" :value="__('Chave de acesso')" />
+            <x-text-input id="access_key" class="block mt-1 w-full" type="text" name="access_key" :value="old('access_key')" required />
+            <p class="mt-1 text-xs text-gray-500">A chave é gerada pelo dono da empresa.</p>
+            <x-input-error :messages="$errors->get('access_key')" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">
