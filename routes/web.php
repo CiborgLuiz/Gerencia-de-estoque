@@ -33,12 +33,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/produtos', [ProductManagementController::class, 'store'])
         ->middleware('can:create,App\\Models\\Product')
         ->name('products.store');
+    Route::delete('/produtos/{product}', [ProductManagementController::class, 'destroy'])
+        ->middleware('can:delete,product')
+        ->name('products.destroy');
     Route::get('/produtos/{product}/imagem', [ProductController::class, 'image'])
         ->name('products.image');
 
     Route::post('/categorias', [CategoryController::class, 'store'])
         ->middleware('can:create,App\\Models\\Product')
         ->name('categories.store');
+    Route::delete('/categorias/{category}', [CategoryController::class, 'destroy'])
+        ->middleware('can:create,App\\Models\\Product')
+        ->name('categories.destroy');
 
     Route::get('/notas-fiscais', [InvoiceController::class, 'index'])
         ->middleware('role:dono,admin,gerente,vendedor')

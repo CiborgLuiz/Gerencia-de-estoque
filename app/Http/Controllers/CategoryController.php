@@ -36,4 +36,23 @@ class CategoryController extends Controller
 
         return back()->with('status', 'Categoria criada com sucesso.');
     }
+
+    public function destroy(Category $category): RedirectResponse
+    {
+        if ($category->children()->exists()) {
+            return back()->withErrors([
+                'category' => 'Não é possível apagar categoria com subcategorias.',
+            ]);
+        }
+
+        if ($category->products()->exists()) {
+            return back()->withErrors([
+                'category' => 'Não é possível apagar categoria com produtos vinculados.',
+            ]);
+        }
+
+        $category->delete();
+
+        return back()->with('status', 'Categoria apagada com sucesso.');
+    }
 }

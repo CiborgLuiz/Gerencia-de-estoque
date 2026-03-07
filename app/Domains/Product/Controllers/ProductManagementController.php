@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Throwable;
 
@@ -47,6 +49,29 @@ class ProductManagementController extends Controller
         }
 
         return back()->with('status', 'Produto cadastrado com sucesso.');
+    }
+
+    public function destroy(Request $request, Product $product): RedirectResponse
+    {
+        $data = $request->validate([
+            'confirmation' => ['required', 'string'],
+        ]);
+
+        if ((string) $data['confirmation'] !== (string) $product->internal_code) {
+            return back()->withErrors([
+                'product' => 'Confirmação inválida para excluir o produto.',
+            ]);
+        }
+
+        if ($product->image_path) {
+            Storage::disk('public')->delete($product->image_path);
+        }
+
+        $product->delete();
+
+        return redirect()
+            ->route('products.manage')
+            ->with('status', 'Produto excluído com sucesso.');
     }
 
     private function buildCategoryTree(iterable $categories, ?int $parentId = null): array

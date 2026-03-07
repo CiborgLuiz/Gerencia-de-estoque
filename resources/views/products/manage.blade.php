@@ -125,6 +125,12 @@
                                 <div class="flex flex-wrap items-center gap-3">
                                     <a href="{{ route('admin.products.show', $product) }}" class="text-sky-600 hover:underline dark:text-sky-400">Abrir</a>
                                     <a href="{{ route('sales.product', $product) }}" class="text-indigo-600 hover:underline dark:text-indigo-400">Vender este item</a>
+                                    <form method="POST" action="{{ route('products.destroy', $product) }}" onsubmit="return confirmDeleteProduct(event, '{{ $product->internal_code }}', '{{ addslashes($product->name) }}')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="confirmation" value="">
+                                        <button type="submit" class="text-red-600 hover:underline dark:text-red-400">Apagar</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -134,4 +140,25 @@
         </div>
         {{ $products->links() }}
     </div>
+
+    <script>
+        function confirmDeleteProduct(event, internalCode, productName) {
+            const form = event.target;
+            const typed = window.prompt(`Para apagar "${productName}", digite o código interno (${internalCode}).`);
+
+            if (typed === null) {
+                event.preventDefault();
+                return false;
+            }
+
+            if (typed.trim() !== internalCode) {
+                event.preventDefault();
+                window.alert('Código interno incorreto. Produto não apagado.');
+                return false;
+            }
+
+            form.querySelector('input[name="confirmation"]').value = typed.trim();
+            return true;
+        }
+    </script>
 </x-app-layout>
