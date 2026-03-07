@@ -12,6 +12,7 @@ class AccessKey extends Model
         'role_id',
         'expires_at',
         'used_at',
+        'revoked_at',
     ];
 
     protected function casts(): array
@@ -19,6 +20,7 @@ class AccessKey extends Model
         return [
             'expires_at' => 'datetime',
             'used_at' => 'datetime',
+            'revoked_at' => 'datetime',
         ];
     }
 

@@ -10,6 +10,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -25,6 +26,10 @@ class RegisteredUserController extends Controller
         $accessKey = AccessKey::query()
             ->where('code', $request->string('access_key'))
             ->whereNull('used_at')
+            ->when(
+                Schema::hasColumn('access_keys', 'revoked_at'),
+                fn ($query) => $query->whereNull('revoked_at')
+            )
             ->where(function ($query) {
                 $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
             })

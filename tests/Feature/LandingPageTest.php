@@ -13,11 +13,7 @@ test('landing page can be rendered before login', function () {
     $response->assertSee('Entrar');
 });
 
-<<<<<<< ours
-test('admin can authenticate with default seeded credentials', function () {
-=======
 test('owner account can authenticate with default seeded credentials', function () {
->>>>>>> theirs
     $this->seed(DatabaseSeeder::class);
 
     $response = $this->post('/login', [
@@ -26,5 +22,17 @@ test('owner account can authenticate with default seeded credentials', function 
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('admin.dashboard', absolute: false));
+    $response->assertRedirect(route('dashboard', absolute: false));
+});
+
+test('manager account can authenticate with seeded credentials', function () {
+    $this->seed(DatabaseSeeder::class);
+
+    $response = $this->post('/login', [
+        'email' => 'gerente@email.com',
+        'password' => '123456',
+    ]);
+
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('dashboard', absolute: false));
 });

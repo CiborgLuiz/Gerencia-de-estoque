@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@email.com'],
             [
                 'name' => 'Dono da Empresa',
-                'password' => bcrypt('123456'),
+                'password' => bcrypt('donodaempresa123-senha'),
                 'role_id' => $ownerRole?->id,
                 'iden' => 'dono',
             ]

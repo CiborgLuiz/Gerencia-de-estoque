@@ -11,8 +11,16 @@ class ProductService
     public function create(array $data): Product
     {
         if (($data['image'] ?? null) instanceof UploadedFile) {
-            $data['image_path'] = $data['image']->store('products', 'public');
+            $storedPath = Storage::disk('public')->putFile('products', $data['image']);
+            if (!$storedPath) {
+                throw new \RuntimeException('Falha ao enviar imagem do produto.');
+            }
+
+            $data['image_path'] = $storedPath;
         }
+
+        // Compatibilidade com schema legado que ainda possui coluna "price" obrigatoria.
+        $data['price'] = $data['sale_price'] ?? $data['price'] ?? 0;
 
         unset($data['image']);
 
@@ -25,7 +33,12 @@ class ProductService
             Storage::disk('public')->delete($product->image_path);
         }
 
-        $product->image_path = $file->store('products', 'public');
+        $storedPath = Storage::disk('public')->putFile('products', $file);
+        if (!$storedPath) {
+            throw new \RuntimeException('Falha ao substituir imagem do produto.');
+        }
+
+        $product->image_path = $storedPath;
         $product->save();
 
         return $product;

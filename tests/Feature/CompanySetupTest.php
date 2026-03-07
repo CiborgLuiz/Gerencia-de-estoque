@@ -7,12 +7,17 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('database seeder creates owner account and access keys', function () {
+test('database seeder creates owner and manager accounts with access keys', function () {
     $this->seed(DatabaseSeeder::class);
 
     $this->assertDatabaseHas('users', [
         'email' => 'admin@email.com',
         'iden' => 'dono',
+    ]);
+
+    $this->assertDatabaseHas('users', [
+        'email' => 'gerente@email.com',
+        'iden' => 'gerente',
     ]);
 
     $owner = User::where('email', 'admin@email.com')->first();

@@ -13,10 +13,22 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4" x-data="{ showPassword: false, showConfirmation: false }">
             <x-input-label for="password" :value="__('Senha')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+            <div class="relative mt-1">
+                <x-text-input id="password" class="block w-full pr-12" x-bind:type="showPassword ? 'text' : 'password'" name="password" required autocomplete="new-password" />
+                <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 px-3 text-sm text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100" x-text="showPassword ? 'Ocultar' : 'Ver'"></button>
+            </div>
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
+
+            <div class="mt-4">
+                <x-input-label for="password_confirmation" :value="__('Confirmar senha')" />
+                <div class="relative mt-1">
+                    <x-text-input id="password_confirmation" class="block w-full pr-12" x-bind:type="showConfirmation ? 'text' : 'password'" name="password_confirmation" required autocomplete="new-password" />
+                    <button type="button" @click="showConfirmation = !showConfirmation" class="absolute inset-y-0 right-0 px-3 text-sm text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100" x-text="showConfirmation ? 'Ocultar' : 'Ver'"></button>
+                </div>
+                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            </div>
         </div>
 
         <div class="mt-4">

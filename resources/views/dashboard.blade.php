@@ -1,15 +1,15 @@
 <x-app-layout>
-    <x-slot name="header"><h2 class="font-semibold text-xl text-gray-800">Dashboard Empresarial</h2></x-slot>
+    <x-slot name="header"><h2 class="font-semibold text-xl text-gray-900 dark:text-gray-100">Dashboard Empresarial</h2></x-slot>
     <div class="p-6 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="bg-white p-4 rounded shadow">Produtos: <strong>{{ $totalProducts }}</strong></div>
-            <div class="bg-white p-4 rounded shadow">Categorias: <strong>{{ $totalCategories }}</strong></div>
-            <div class="bg-white p-4 rounded shadow text-red-600">Estoque baixo: <strong>{{ $lowStock }}</strong></div>
-            <div class="bg-white p-4 rounded shadow">Lucro total: <strong>R$ {{ number_format($profit,2,',','.') }}</strong></div>
+            <div class="rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">Produtos: <strong>{{ $totalProducts }}</strong></div>
+            <div class="rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">Categorias: <strong>{{ $totalCategories }}</strong></div>
+            <div class="rounded-lg border border-gray-200 bg-white p-4 shadow text-red-600 dark:border-gray-700 dark:bg-gray-800">Estoque baixo: <strong>{{ $lowStock }}</strong></div>
+            <div class="rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">Lucro total: <strong>R$ {{ number_format($profit,2,',','.') }}</strong></div>
         </div>
 
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="font-semibold mb-2">Receita Mensal</h3>
+        <div class="rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-800">
+            <h3 class="mb-2 font-semibold text-gray-900 dark:text-gray-100">Receita Mensal</h3>
             <canvas id="monthlyRevenueChart"></canvas>
         </div>
     </div>

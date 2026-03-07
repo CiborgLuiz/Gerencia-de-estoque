@@ -22,6 +22,13 @@ class InvoiceController extends Controller
         ]);
     }
 
+    public function show(Invoice $invoice): View
+    {
+        return view('invoice.show', [
+            'invoice' => $invoice->load(['items.product', 'customer', 'user', 'sale']),
+        ]);
+    }
+
     public function cancel(Request $request, Invoice $invoice): RedirectResponse
     {
         $data = $request->validate(['justification' => ['required', 'string', 'min:15']]);

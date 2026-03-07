@@ -25,7 +25,7 @@ class SaleService
                 'total_value' => 0,
             ]);
 
-            $total = 0;
+            $totalInCents = 0;
 
             foreach ($payload['items'] as $item) {
                 /** @var Product $product */
@@ -37,8 +37,10 @@ class SaleService
 
                 $product->decrement('stock', $item['quantity']);
 
-                $lineTotal = bcmul((string) $product->sale_price, (string) $item['quantity'], 2);
-                $total = bcadd((string) $total, $lineTotal, 2);
+                $unitPriceInCents = $this->toCents((string) $product->sale_price);
+                $lineTotalInCents = $unitPriceInCents * (int) $item['quantity'];
+                $lineTotal = $this->fromCents($lineTotalInCents);
+                $totalInCents += $lineTotalInCents;
 
                 SaleItem::create([
                     'sale_id' => $sale->id,
@@ -49,12 +51,22 @@ class SaleService
                 ]);
             }
 
-            $sale->update(['total_value' => $total]);
+            $sale->update(['total_value' => $this->fromCents($totalInCents)]);
             $sale->load('items');
 
             $this->invoiceService->issueFromSale($sale);
 
-            return $sale->fresh(['items.product', 'user', 'customer']);
+            return $sale->fresh(['items.product', 'user', 'customer', 'invoice']);
         });
+    }
+
+    private function toCents(string $amount): int
+    {
+        return (int) round(((float) $amount) * 100);
+    }
+
+    private function fromCents(int $cents): string
+    {
+        return number_format($cents / 100, 2, '.', '');
     }
 }

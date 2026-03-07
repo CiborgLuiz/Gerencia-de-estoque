@@ -4,62 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
+use Throwable;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store(Request $request): RedirectResponse
     {
-        //
-    }
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'name')
+                    ->where(fn ($query) => $query->where('parent_id', $request->input('parent_id'))),
+            ],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'parent_id' => ['nullable', 'exists:categories,id'],
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        try {
+            Category::create($validated);
+        } catch (Throwable) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'category' => 'Erro ao salvar categoria. Verifique os dados e tente novamente.',
+                ]);
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Category $category)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Category $category)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Category $category)
-    {
-        //
+        return back()->with('status', 'Categoria criada com sucesso.');
     }
 }

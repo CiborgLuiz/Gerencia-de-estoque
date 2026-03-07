@@ -13,12 +13,19 @@ class StatisticsController extends Controller
 {
     public function index(): View
     {
+        $connection = DB::connection()->getDriverName();
+        $monthExpression = match ($connection) {
+            'mysql' => "DATE_FORMAT(created_at, '%Y-%m')",
+            'pgsql' => "TO_CHAR(created_at, 'YYYY-MM')",
+            default => "strftime('%Y-%m', created_at)",
+        };
+
         $profit = SaleItem::query()->join('products', 'products.id', '=', 'sale_items.product_id')
             ->selectRaw('COALESCE(SUM((sale_items.unit_price - products.purchase_price) * sale_items.quantity),0) as total')
             ->value('total');
 
         $monthlyRevenue = DB::table('sales')
-            ->selectRaw('strftime("%Y-%m", created_at) as month, SUM(total_value) as total')
+            ->selectRaw($monthExpression.' as month, SUM(total_value) as total')
             ->groupBy('month')
             ->orderBy('month')
             ->get();
