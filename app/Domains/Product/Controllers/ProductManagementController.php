@@ -63,11 +63,23 @@ class ProductManagementController extends Controller
             ]);
         }
 
+        if ($product->saleItems()->exists() || $product->invoiceItems()->exists()) {
+            return back()->withErrors([
+                'product' => 'Não é possível apagar este produto porque ele já possui vendas ou notas fiscais vinculadas.',
+            ]);
+        }
+
         if ($product->image_path) {
             Storage::disk('public')->delete($product->image_path);
         }
 
-        $product->delete();
+        try {
+            $product->forceDelete();
+        } catch (Throwable) {
+            return back()->withErrors([
+                'product' => 'Não foi possível apagar o produto no banco de dados.',
+            ]);
+        }
 
         return redirect()
             ->route('products.manage')

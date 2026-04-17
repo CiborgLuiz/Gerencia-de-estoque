@@ -1,6 +1,7 @@
 <?php
 
 use App\Domains\Invoice\Controllers\InvoiceController;
+use App\Domains\Nfse\Controllers\NfseController;
 use App\Domains\Product\Controllers\ProductManagementController;
 use App\Domains\Sales\Controllers\SaleController;
 use App\Domains\Sales\Controllers\StatisticsController;
@@ -13,7 +14,7 @@ Route::view('/', 'landing')->name('home');
 
 require __DIR__.'/auth.php';
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [StatisticsController::class, 'index'])->name('dashboard');
 
     Route::controller(ProfileController::class)->group(function () {
@@ -56,9 +57,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/notas-fiscais/{invoice}/cancelar', [InvoiceController::class, 'cancel'])
         ->middleware('role:dono,admin')
         ->name('invoices.cancel');
+
+    Route::get('/notas-servico', [NfseController::class, 'index'])
+        ->middleware('role:dono,admin,gerente,vendedor')
+        ->name('nfse.index');
+    Route::post('/notas-servico/servicos', [NfseController::class, 'storeCatalogItem'])
+        ->middleware('role:dono,admin,gerente')
+        ->name('nfse.catalog-items.store');
+    Route::post('/notas-servico', [NfseController::class, 'issue'])
+        ->middleware('role:dono,admin,gerente,vendedor')
+        ->name('nfse.store');
+    Route::get('/notas-servico/{serviceInvoice}', [NfseController::class, 'show'])
+        ->middleware('role:dono,admin,gerente,vendedor')
+        ->name('nfse.show');
 });
 
-Route::middleware(['auth', 'verified', 'role:dono,admin,gerente'])
+Route::middleware(['auth', 'role:dono,admin,gerente'])
     ->prefix('admin')
     ->as('admin.')
     ->group(base_path('routes/admin.php'));

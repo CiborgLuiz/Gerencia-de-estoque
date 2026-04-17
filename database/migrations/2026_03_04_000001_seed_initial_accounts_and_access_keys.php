@@ -21,7 +21,8 @@ return new class extends Migration {
             ['email' => 'admin@email.com'],
             [
                 'name' => 'Dono da Empresa',
-                'password' => Hash::make('123456'),
+                'password' => Hash::make('donodaempresa123-senha'),
+                'email_verified_at' => now(),
                 'iden' => 'dono',
                 'role_id' => $ownerRoleId,
                 'updated_at' => now(),

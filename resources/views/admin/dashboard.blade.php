@@ -20,6 +20,11 @@
                 <p class="text-sm text-gray-500 dark:text-gray-300 mt-1">Visualize e abra notas fiscais emitidas.</p>
             </a>
 
+            <a href="{{ route('nfse.index') }}" class="rounded-lg border border-gray-200 bg-white p-6 shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+                <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100">Acessar NFS-e</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-300 mt-1">Cadastre servicos, emita NFS-e e consulte o XML.</p>
+            </a>
+
             @if(auth()->user()?->hasRole('dono', 'admin'))
                 <a href="{{ route('admin.access-keys.index') }}" class="rounded-lg border border-gray-200 bg-white p-6 shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
                     <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100">Gerar chaves de colaboradores</h3>

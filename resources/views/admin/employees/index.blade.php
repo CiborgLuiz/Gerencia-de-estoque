@@ -36,11 +36,11 @@
                                 <td class="px-4 py-3">{{ $employee->role?->name ?? $employee->iden }}</td>
                                 <td class="px-4 py-3">{{ $employee->created_at?->format('d/m/Y H:i') }}</td>
                                 <td class="px-4 py-3">
-                                    <form method="POST" action="{{ route('admin.employees.destroy', $employee) }}" onsubmit="return confirm('Deseja realmente desvincular esta conta?')">
+                                    <form method="POST" action="{{ route('admin.employees.destroy', $employee) }}" onsubmit="return confirm('Deseja realmente apagar este funcionário? Esta ação remove a conta do banco quando não houver histórico vinculado.')">
                                         @csrf
                                         @method('DELETE')
                                         <button class="rounded bg-red-600 px-3 py-1 text-xs font-semibold text-white hover:bg-red-500">
-                                            Desvincular conta
+                                            Apagar funcionário
                                         </button>
                                     </form>
                                 </td>

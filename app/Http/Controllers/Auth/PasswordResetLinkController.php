@@ -41,4 +41,17 @@ class PasswordResetLinkController extends Controller
                     : back()->withInput($request->only('email'))
                         ->withErrors(['email' => __($status)]);
     }
+
+    public function storeForAuthenticatedUser(Request $request): RedirectResponse
+    {
+        $status = Password::sendResetLink([
+            'email' => $request->user()->email,
+        ]);
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with('status', 'password-reset-link-sent')
+            : back()->withErrors([
+                'password_reset_link' => 'Nao foi possivel enviar o link de redefinicao por email.',
+            ]);
+    }
 }

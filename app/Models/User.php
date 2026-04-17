@@ -36,7 +36,6 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -72,9 +71,19 @@ class User extends Authenticatable
         return $this->hasMany(Invoice::class);
     }
 
+    public function serviceInvoices(): HasMany
+    {
+        return $this->hasMany(ServiceInvoice::class);
+    }
+
     public function hasRole(string ...$roles): bool
     {
         return in_array($this->iden, $roles, true);
+    }
+
+    public function isOwnerAccount(): bool
+    {
+        return $this->hasRole(self::ROLE_OWNER);
     }
 
     public function isAdmin(): bool

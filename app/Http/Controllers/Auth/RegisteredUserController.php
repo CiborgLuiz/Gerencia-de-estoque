@@ -6,7 +6,6 @@ use App\Domains\User\Requests\RegisterUserRequest;
 use App\Http\Controllers\Controller;
 use App\Models\AccessKey;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -54,9 +53,10 @@ class RegisteredUserController extends Controller
 
         $accessKey->update(['used_at' => now()]);
 
-        event(new Registered($user));
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        $route = $user->isAdmin() ? 'admin.dashboard' : 'dashboard';
+
+        return redirect(route($route, absolute: false));
     }
 }

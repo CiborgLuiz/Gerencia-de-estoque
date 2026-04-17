@@ -10,29 +10,31 @@
     class="bg-white border-b border-gray-100 dark:bg-gray-900 dark:border-gray-800"
 >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
+        <div class="flex min-h-16 items-center justify-between gap-4 py-2">
+            <div class="flex min-w-0 items-center gap-6">
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="text-lg font-semibold text-gray-900 dark:text-gray-100">Gerência de Estoque</a>
                 </div>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                <div class="hidden min-w-0 flex-1 sm:flex">
+                    <div class="flex min-w-0 items-center gap-6 overflow-x-auto whitespace-nowrap pb-1 [scrollbar-width:none] [-ms-overflow-style:none]">
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('products.manage')" :active="request()->routeIs('products.*')">Produtos</x-nav-link>
-                    <x-nav-link :href="route('sales.catalog')" :active="request()->routeIs('sales.*')">Vendas</x-nav-link>
-                    <x-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">Notas Fiscais</x-nav-link>
-                    @if (Auth::user()->hasRole('dono', 'admin', 'gerente'))
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">Admin</x-nav-link>
-                    @endif
-                    @if (Auth::user()->hasRole('dono', 'admin'))
-                        <x-nav-link :href="route('admin.access-keys.index')" :active="request()->routeIs('admin.access-keys.*')">Chaves</x-nav-link>
-                    @endif
-                    @if (Auth::user()->hasRole('dono'))
-                        <x-nav-link :href="route('admin.employees.index')" :active="request()->routeIs('admin.employees.*')">Funcionários</x-nav-link>
-                    @endif
+                        <x-nav-link :href="route('products.manage')" :active="request()->routeIs('products.*')">Produtos</x-nav-link>
+                        <x-nav-link :href="route('sales.catalog')" :active="request()->routeIs('sales.*')">Vendas</x-nav-link>
+                        <x-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*') || request()->routeIs('nfse.*')">Notas Fiscais</x-nav-link>
+                        @if (Auth::user()->hasRole('dono', 'admin', 'gerente'))
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">Admin</x-nav-link>
+                        @endif
+                        @if (Auth::user()->hasRole('dono', 'admin'))
+                            <x-nav-link :href="route('admin.access-keys.index')" :active="request()->routeIs('admin.access-keys.*')">Chaves</x-nav-link>
+                        @endif
+                        @if (Auth::user()->hasRole('dono'))
+                            <x-nav-link :href="route('admin.employees.index')" :active="request()->routeIs('admin.employees.*')">Funcionários</x-nav-link>
+                        @endif
+                    </div>
                 </div>
             </div>
 
@@ -91,7 +93,7 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('products.manage')" :active="request()->routeIs('products.*')">Produtos</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('sales.catalog')" :active="request()->routeIs('sales.*')">Vendas</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">Notas Fiscais</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*') || request()->routeIs('nfse.*')">Notas Fiscais</x-responsive-nav-link>
             @if (Auth::user()->hasRole('dono', 'admin', 'gerente'))
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">Admin</x-responsive-nav-link>
             @endif

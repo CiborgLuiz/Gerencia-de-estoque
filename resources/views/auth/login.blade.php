@@ -35,7 +35,16 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="mt-4 flex items-center justify-between gap-4">
+            @if (Route::has('password.request'))
+                <a
+                    class="text-sm text-gray-600 underline transition hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                    href="{{ route('password.request') }}"
+                >
+                    Esqueci minha senha
+                </a>
+            @endif
+
             <x-primary-button class="ms-3">
                 {{ __('Entrar') }}
             </x-primary-button>

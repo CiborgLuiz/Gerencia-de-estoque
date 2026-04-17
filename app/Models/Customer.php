@@ -21,4 +21,9 @@ class Customer extends Model
     {
         return $this->hasMany(Invoice::class);
     }
+
+    public function serviceInvoices(): HasMany
+    {
+        return $this->hasMany(ServiceInvoice::class);
+    }
 }

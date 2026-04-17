@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Dono da Empresa',
                 'password' => bcrypt('donodaempresa123-senha'),
+                'email_verified_at' => now(),
                 'role_id' => $ownerRole?->id,
                 'iden' => 'dono',
             ]

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Throwable;
 
@@ -51,7 +51,13 @@ class CategoryController extends Controller
             ]);
         }
 
-        $category->delete();
+        try {
+            $category->forceDelete();
+        } catch (Throwable) {
+            return back()->withErrors([
+                'category' => 'Não foi possível apagar a categoria no banco de dados.',
+            ]);
+        }
 
         return back()->with('status', 'Categoria apagada com sucesso.');
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AccessKey;
 use App\Models\Role;
 use Database\Seeders\RoleSeeder;
 
@@ -14,7 +15,7 @@ test('new users can register with access key', function () {
 
     $roleId = Role::query()->where('name', 'vendedor')->value('id');
 
-    \App\Models\AccessKey::query()->create([
+    AccessKey::query()->create([
         'code' => 'VENDEDOR-TESTE-001',
         'role_id' => $roleId,
         'expires_at' => null,
@@ -25,6 +26,7 @@ test('new users can register with access key', function () {
         'name' => 'Test User',
         'email' => 'test@example.com',
         'password' => '123456',
+        'password_confirmation' => '123456',
         'access_key' => 'VENDEDOR-TESTE-001',
     ]);
 

@@ -4,15 +4,26 @@
     </x-slot>
 
     <div class="p-6 space-y-4">
+        @include('invoice.partials.tabs')
+
         @if(session('status'))
             <div class="rounded-md border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-200">
                 {{ session('status') }}
             </div>
         @endif
 
-        <div class="overflow-auto rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+        <div class="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Historico fiscal</p>
+                    <h3 class="mt-1 text-xl font-semibold text-slate-900 dark:text-slate-100">NF-e emitidas</h3>
+                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Abra cada registro para ver o espelho completo da nota fiscal.</p>
+                </div>
+            </div>
+
+            <div class="overflow-auto rounded-[1.5rem] border border-slate-200 dark:border-slate-700">
             <table class="min-w-full text-sm text-gray-900 dark:text-gray-100">
-                <thead class="bg-gray-50 dark:bg-gray-900">
+                <thead class="bg-slate-50 dark:bg-slate-950">
                     <tr>
                         <th class="px-4 py-3 text-left">NF</th>
                         <th class="px-4 py-3 text-left">Status</th>
@@ -43,7 +54,7 @@
                             <td class="px-4 py-3">
                                 <div class="flex min-w-72 flex-col gap-2">
                                     <a href="{{ route('invoices.show', $invoice) }}" target="_blank" class="inline-flex w-fit rounded bg-sky-600 px-3 py-1 text-xs font-semibold text-white hover:bg-sky-500">
-                                        Abrir nota
+                                        Abrir nota completa
                                     </a>
                                     @if($invoice->status === 'autorizada')
                                         <form method="POST" action="{{ route('invoices.cancel', $invoice) }}" class="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -67,6 +78,7 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
         </div>
 
         {{ $invoices->links() }}

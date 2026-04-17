@@ -58,3 +58,17 @@ test('password can be reset with valid token', function () {
         return true;
     });
 });
+
+test('authenticated user can request a password reset link from profile', function () {
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->post(route('profile.password.email'));
+
+    $response
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    Notification::assertSentTo($user, ResetPassword::class);
+});

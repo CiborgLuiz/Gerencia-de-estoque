@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Throwable;
 
 class EmployeeController extends Controller
 {
@@ -30,8 +31,20 @@ class EmployeeController extends Controller
             ]);
         }
 
-        $user->delete();
+        if ($user->sales()->exists() || $user->invoices()->exists() || $user->serviceInvoices()->exists()) {
+            return back()->withErrors([
+                'employee' => 'Não é possível apagar este funcionário porque ele possui vendas ou notas fiscais vinculadas.',
+            ]);
+        }
 
-        return back()->with('status', 'Conta desvinculada com sucesso.');
+        try {
+            $user->forceDelete();
+        } catch (Throwable) {
+            return back()->withErrors([
+                'employee' => 'Não foi possível apagar este funcionário no banco de dados.',
+            ]);
+        }
+
+        return back()->with('status', 'Funcionário apagado com sucesso.');
     }
 }
